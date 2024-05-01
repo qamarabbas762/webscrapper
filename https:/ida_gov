@@ -7,16 +7,16 @@ async def scrape(page: Page, url: str) -> None:
     # Navigate to the specified URL
     await page.goto(url)
 
-    # Select elements for links and text
+    
     document_link_elements = await page.query_selector_all("//div[@class='text-row']//a[@class='btn-icon']")
     text_elements = await page.query_selector_all("//div[@class='text-row']//div[@class='text']")
 
-    # Check if there's a mismatch in the number of elements
+    
     if len(document_link_elements) != len(text_elements):
         print("Error: Mismatch in the number of link and text elements")
         return
 
-    # Loop through both lists simultaneously
+    
     for link_element, text_element in zip(document_link_elements, text_elements):
         # Get the href attribute for the link
         href = await link_element.get_attribute("href")
@@ -24,11 +24,11 @@ async def scrape(page: Page, url: str) -> None:
             print("Error: No href attribute found")
             continue
 
-        # Get the text content for the heading
-        name = await text_element.text_content()  # Use text_content() to extract text
+        
+        name = await text_element.text_content()  
 
         if name:
-            # Save or process the data as needed
+            
             print({"name": name.strip(), "url": href})  # Example output
         else:
             print("Error: No text content found")
@@ -36,8 +36,8 @@ async def scrape(page: Page, url: str) -> None:
 
 async def main() -> None:
     async with async_playwright() as p:
-        # Initialize Playwright components
-        browser = await p.chromium.launch(headless=False)  # Set headless to True if needed
+        
+        browser = await p.chromium.launch(headless=False)  
         context = await browser.new_context()
         page = await context.new_page()
 
